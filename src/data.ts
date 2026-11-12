@@ -1,7 +1,7 @@
 export type Song={id:string;videoId:string;title:string;channel:string;thumb:string;requestedBy:string;ownerId:string;status:'queued'|'playing'|'done'};
 export type Photo={id:string;data:string;by:string;status:'pending'|'approved'|'rejected'|'shown';created:number};
-export type State={eventName:string; songs:Song[];history:Song[];photos:Photo[];now:Song|null;started:boolean;photoSeconds:number;photoInterval:number;lastPhotoAt:number;activePhotoId:string|null;allowRequests:boolean};
-export const initial:State={eventName:'Confraternização da Família Camargo',songs:[],history:[],photos:[],now:null,started:false,photoSeconds:10,photoInterval:60,lastPhotoAt:0,activePhotoId:null,allowRequests:true};
+export type State={eventName:string; songs:Song[];history:Song[];photos:Photo[];now:Song|null;started:boolean;photoSeconds:number;photoInterval:number;lastPhotoAt:number;activePhotoId:string|null;allowRequests:boolean;qrPinned:boolean;qrForcedUntil:number};
+export const initial:State={eventName:'Confraternização da Família Camargo',songs:[],history:[],photos:[],now:null,started:false,photoSeconds:10,photoInterval:60,lastPhotoAt:0,activePhotoId:null,allowRequests:true,qrPinned:false,qrForcedUntil:0};
 export const KEY='jukebox-party-demo-v1';
 export function load():State{try{const s=localStorage.getItem(KEY);return s?{...initial,...JSON.parse(s)}:initial}catch{return initial}}
 export function videoIdFrom(s:string){const v=s.trim();if(/^[\w-]{11}$/.test(v))return v;try{const u=new URL(v);if(!['youtube.com','www.youtube.com','m.youtube.com','music.youtube.com','youtu.be','www.youtu.be'].includes(u.hostname))return null;const id=u.hostname.includes('youtu.be')?u.pathname.split('/')[1]:u.searchParams.get('v')||u.pathname.match(/\/(?:shorts|embed|live)\/([\w-]{11})/)?.[1];return id&&/^[\w-]{11}$/.test(id)?id:null}catch{return null}}
