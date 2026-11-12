@@ -17,7 +17,7 @@ function SongList({songs}:{songs:Song[]}){return <div className="queue">{songs.l
 function TV({s,update}:{s:State,update:(f:(s:State)=>State)=>void}){const [active,setActive]=useState(false);const [playError,setPlayError]=useState('');const [clock,setClock]=useState(Date.now());const [songInfoUntil,setSongInfoUntil]=useState(0);const [startedAt,setStartedAt]=useState(Date.now());const guestUrl=`${location.origin}/pedir`;
 useEffect(()=>{const t=setInterval(()=>setClock(Date.now()),1000);return()=>clearInterval(t)},[]);
 useEffect(()=>{if(s.now?.id)setSongInfoUntil(Date.now()+6000)},[s.now?.id]);
-const infoCycle=active&&s.started&&((clock-startedAt)%60000<12000);
+const infoCycle=active&&s.started&&((clock-startedAt)%60000<25000);
 const showInfo=!s.activePhotoId&&(s.qrPinned||clock<s.qrForcedUntil||infoCycle||clock<songInfoUntil);
 const showQueue=!s.activePhotoId&&(clock<s.qrForcedUntil||infoCycle||clock<songInfoUntil);
 const advance=()=>{update(x=>{const prev=x.now?{...x.now,status:'done' as const}:null;const [next,...rest]=x.songs;return{...x,now:next?{...next,status:'playing'}:null,songs:rest,history:prev?[prev,...x.history].slice(0,100):x.history}})};
